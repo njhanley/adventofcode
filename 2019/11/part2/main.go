@@ -33,13 +33,15 @@ func parse(r io.Reader) (code []int64, err error) {
 type intcode struct {
 	mem    []int64
 	ip, rb int64
-	io     chan int64
+	input  chan int64
+	output chan int64
 }
 
 func newIntcode(code []int64) *intcode {
 	return &intcode{
-		mem: append([]int64(nil), code...),
-		io:  make(chan int64),
+		mem:    append([]int64(nil), code...),
+		input:  make(chan int64),
+		output: make(chan int64),
 	}
 }
 
@@ -106,10 +108,10 @@ func (ic *intcode) run() {
 			*ic.paramref(3) = ic.param(1) * ic.param(2)
 			ic.ip += 4
 		case 3:
-			*ic.paramref(1) = <-ic.io
+			*ic.paramref(1) = <-ic.input
 			ic.ip += 2
 		case 4:
-			ic.io <- ic.param(1)
+			ic.output <- ic.param(1)
 			ic.ip += 2
 		case 5:
 			if ic.param(1) != 0 {
@@ -141,15 +143,10 @@ func (ic *intcode) run() {
 			ic.rb += ic.param(1)
 			ic.ip += 2
 		case 99:
-			close(ic.io)
-			ic.ip = -1
+			close(ic.output)
 			return
 		}
 	}
-}
-
-func (ic *intcode) running() bool {
-	return ic.ip >= 0
 }
 
 const (
@@ -171,15 +168,20 @@ func newRobot(code []int64) *robot {
 	r := &robot{
 		ic: newIntcode(code),
 	}
+	r.ic.input = make(chan int64, 1)
 	go r.ic.run()
 	return r
 }
 
 func (r *robot) paint(image map[point]int64) {
-	for r.ic.running() {
-		r.ic.io <- image[r.position]
-		image[r.position] = <-r.ic.io
-		if <-r.ic.io == 0 {
+	for {
+		r.ic.input <- image[r.position]
+		if n, ok := <-r.ic.output; ok {
+			image[r.position] = n
+		} else {
+			return
+		}
+		if <-r.ic.output == 0 {
 			r.direction = (r.direction - 1) % 4
 		} else {
 			r.direction = (r.direction + 1) % 4
