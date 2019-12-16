@@ -80,8 +80,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	var fuel int
-	for countOre(recipes, make(map[string]int), material{fuel + 1, "FUEL"}) <= 1000000000000 {
+	const ore = 1000000000000
+	fuel := ore / countOre(recipes, make(map[string]int), material{1, "FUEL"}) // rough underestimate
+	for countOre(recipes, make(map[string]int), material{fuel + 1, "FUEL"}) <= ore {
 		fuel++
 	}
 	fmt.Println(fuel)
