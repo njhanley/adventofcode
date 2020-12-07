@@ -1,3 +1,5 @@
+"use strict";
+
 const fs = require("fs");
 
 Array.prototype.sum = function (callback) {
@@ -5,6 +7,10 @@ Array.prototype.sum = function (callback) {
         (accumulator, element, index) => accumulator + callback(element, index),
         0
     );
+};
+
+Object.prototype.log = function () {
+    console.log(this, ...arguments);
 };
 
 Set.prototype.intersect = function (set) {
@@ -15,10 +21,8 @@ function parse(str, regexp, callback) {
     return Array.from(str.matchAll(regexp), callback);
 }
 
-const input = fs.readFileSync("input.txt", "utf-8");
-const groups = input
+fs.readFileSync("input.txt", "utf-8")
     .split("\n\n")
-    .map(record =>
-        parse(record, /([a-z]+)(\n|$)/g, match => new Set(match[1]))
-    );
-console.log(groups.sum(group => group.reduce((a, b) => a.intersect(b)).size));
+    .map(record => parse(record, /([a-z]+)(\n|$)/g, match => new Set(match[1])))
+    .sum(group => group.reduce((a, b) => a.intersect(b)).size)
+    .log();

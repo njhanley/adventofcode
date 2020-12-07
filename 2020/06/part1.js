@@ -1,3 +1,5 @@
+"use strict";
+
 const fs = require("fs");
 
 Array.prototype.sum = function (callback) {
@@ -7,8 +9,12 @@ Array.prototype.sum = function (callback) {
     );
 };
 
-const input = fs.readFileSync("input.txt", "utf-8");
-const groups = input
+Object.prototype.log = function () {
+    console.log(this, ...arguments);
+};
+
+fs.readFileSync("input.txt", "utf-8")
     .split("\n\n")
-    .map(record => new Set(record.replace(/\n/g, "")));
-console.log(groups.sum(group => group.size));
+    .map(record => new Set(record.replace(/\n/g, "")))
+    .sum(group => group.size)
+    .log();
