@@ -47,9 +47,8 @@ String.prototype.matchMap = function (regexp, callback) {
 
 fs.readFileSync("input.txt", "utf-8")
     .matchMap(/\d+/g, match => +match[0])
-    .sort((a, b) => a - b)
-    .pipe(a => [0, ...a, a[a.length - 1] + 3])
-    .reverse()
+    .sort((a, b) => b - a)
+    .pipe(a => [a[0] + 3, ...a, 0])
     .map((n, i, a) => [
         n,
         [1, 2, 3].filterMap(j =>
