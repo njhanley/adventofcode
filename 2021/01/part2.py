@@ -7,16 +7,17 @@ def read(filename):
 
 
 def match(string, pattern, function):
-    return (function(match) for match in re.finditer(pattern, string))
+    return [
+        function(match.group(), *match.groups())
+        for match in re.finditer(pattern, string)
+    ]
 
 
-data = read("input.txt")
-depths = list(match(data, r"\d+", lambda m: int(m[0])))
-sums = [depths[i] + depths[i + 1] + depths[i + 2] for i, _ in enumerate(depths[2:])]
+def parse(filename, pattern, function):
+    return match(read(filename), pattern, function)
 
-counter = 0
-for i, _ in enumerate(sums[1:]):
-    if sums[i + 1] > sums[i]:
-        counter += 1
 
-print(counter)
+data = parse("input.txt", r"\d+", int)
+sums = [a + b + c for a, b, c in zip(data, data[1:], data[2:])]
+count = sum(a < b for a, b in zip(sums, sums[1:]))
+print(count)
