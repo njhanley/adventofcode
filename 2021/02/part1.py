@@ -7,17 +7,14 @@ def read(filename):
 
 
 def match(string, pattern, function):
-    return [
-        function(match.group(), *match.groups())
-        for match in re.finditer(pattern, string)
-    ]
+    return [function(*match.groups()) for match in re.finditer(pattern, string)]
 
 
 def parse(filename, pattern, function):
     return match(read(filename), pattern, function)
 
 
-data = parse("input.txt", r"(\w+) (\d+)", lambda _, a, b: (a, int(b)))
+data = parse("input.txt", r"(\w+) (\d+)", lambda a, b: (a, int(b)))
 
 position, depth = 0, 0
 for direction, value in data:
