@@ -1,4 +1,5 @@
 import re
+from functools import reduce
 
 
 def read(filename):
@@ -14,11 +15,14 @@ def parse(filename, pattern, function):
     return match(read(filename), pattern, function)
 
 
-data = parse("input.txt", r"([01]+)", lambda a: a)
+def bits_to_int(iterator):
+    return reduce(lambda a, b: (a << 1) + b, iterator)
 
-bits = len(data[0])
-mcb = "".join(
-    "1" if sum(s[i] == "1" for s in data) > len(data) / 2 else "0" for i in range(bits)
-)
-gamma, epsilon = int(mcb, 2), int("".join({"0": "1", "1": "0"}[b] for b in mcb), 2)
+
+data = parse("input.txt", r"([01]+)", lambda a: [int(b) for b in a])
+
+bit_count = [sum(bits) for bits in zip(*data)]
+gamma = bits_to_int(n >= len(data) / 2 for n in bit_count)
+epsilon = bits_to_int(n < len(data) / 2 for n in bit_count)
+
 print(gamma * epsilon)
