@@ -32,16 +32,29 @@ def is_winner(board):
     return False
 
 
-for n in drawings:
-    winners = []
-    for board in boards:
-        for row in board:
-            for i, m in enumerate(row):
-                if n == m:
-                    row[i] = None
-        if is_winner(board):
-            winners.append(board)
-    boards = [board for board in boards if board not in winners]
-    if len(boards) == 0:
-        print(n * sum(filter(lambda n: n is not None, chain(*winners[-1]))))
-        exit()
+def mark(board, number):
+    for row in board:
+        for i, n in enumerate(row):
+            if n == number:
+                row[i] = None
+
+
+def score(board, number):
+    return number * sum(n for n in chain(*board) if n is not None)
+
+
+def last_winning_score(boards, drawings):
+    for n in drawings:
+        winners = []
+        for board in boards:
+            mark(board, n)
+            if is_winner(board):
+                winners.append(board)
+        for i, board in enumerate(boards):
+            if board in winners:
+                del boards[i]
+        if len(boards) == 0:
+            return score(winners[-1], n)
+
+
+print(last_winning_score(boards, drawings))
