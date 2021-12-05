@@ -22,17 +22,17 @@ data = parse(
 )
 
 
-def sign(n):
-    return 1 if n > 0 else 0 if n == 0 else -1
+def sign(x):
+    return 1 if x > 0 else 0 if x == 0 else -1
 
 
 points = Counter()
 for a, b in data:
-    dx, dy = sign(b[0] - a[0]), sign(b[1] - a[1])
+    d = (sign(b[0] - a[0]), sign(b[1] - a[1]))
     while True:
         points[a] += 1
         if a == b:
             break
-        a = (a[0] + dx, a[1] + dy)
+        a = (a[0] + d[0], a[1] + d[1])
 
-print(sum(crossings > 1 for crossings in points.values()))
+print(sum(n > 1 for n in points.values()))
