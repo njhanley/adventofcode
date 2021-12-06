@@ -18,14 +18,14 @@ def parse(filename, pattern, function):
 data = parse("input.txt", r"(\d+)", int)
 fish = Counter(data)
 
-for day in range(256):
+for _ in range(256):
     new = Counter()
-    for n, m in fish.items():
-        if n == 0:
-            new[6] += m
-            new[8] += m
+    for timer, count in fish.items():
+        if timer == 0:
+            new[6] += count
+            new[8] += count
         else:
-            new[n - 1] += m
+            new[timer - 1] += count
     fish = new
 
 print(sum(fish.values()))

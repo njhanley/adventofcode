@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 
 
 def read(filename):
@@ -15,15 +16,16 @@ def parse(filename, pattern, function):
 
 
 data = parse("input.txt", r"(\d+)", int)
+fish = Counter(data)
 
-for day in range(80):
-    new = []
-    for i, n in enumerate(data):
-        if n == 0:
-            data[i] = 6
-            new.append(8)
+for _ in range(80):
+    new = Counter()
+    for timer, count in fish.items():
+        if timer == 0:
+            new[6] += count
+            new[8] += count
         else:
-            data[i] -= 1
-    data += new
+            new[timer - 1] += count
+    fish = new
 
-print(len(data))
+print(sum(fish.values()))
