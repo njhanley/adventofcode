@@ -15,22 +15,24 @@ def parse(filename, pattern, function):
 
 
 data = parse("input.txt", r"(\d+)", lambda s: [int(c) for c in s])
+width, height = len(data[0]), len(data)
 
 
 def height_at(x, y):
-    try:
+    if 0 <= x < width and 0 <= y < height:
         return data[x][y]
-    except IndexError:
-        return 9
+    return 9
 
 
-risk = 0
-for x, row in enumerate(data):
-    for y, n in enumerate(row):
-        if all(
-            n < height_at(x + dx, y + dy)
-            for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]
-        ):
-            risk += 1 + n
+def adjacent(x, y):
+    return [(x + dx, y + dy) for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]]
+
+
+risk = sum(
+    1 + n
+    for x, row in enumerate(data)
+    for y, n in enumerate(row)
+    if all(n < height_at(x, y) for x, y in adjacent(x, y))
+)
 
 print(risk)

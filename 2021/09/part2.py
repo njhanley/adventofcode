@@ -16,15 +16,13 @@ def parse(filename, pattern, function):
 
 
 data = parse("input.txt", r"(\d+)", lambda s: [int(c) for c in s])
+width, height = len(data[0]), len(data)
 
 
 def height_at(x, y):
-    if x < 0 or y < 0:
-        return 9
-    try:
+    if 0 <= x < width and 0 <= y < height:
         return data[x][y]
-    except IndexError:
-        return 9
+    return 9
 
 
 def adjacent(x, y):
@@ -35,12 +33,10 @@ def basin_size(x, y, points=None):
     if points is None:
         points = set()
 
-    if (x, y) in points:
+    if (x, y) in points or height_at(x, y) == 9:
         return 0
-    points.add((x, y))
 
-    if height_at(x, y) == 9:
-        return 0
+    points.add((x, y))
 
     return 1 + sum(basin_size(x, y, points) for x, y in adjacent(x, y))
 
