@@ -1,5 +1,6 @@
 import re
 from collections import Counter
+from itertools import zip_longest
 
 
 def read(filename):
@@ -17,7 +18,7 @@ def parse(filename, pattern, function):
 
 data = read("input.txt")
 template = data.splitlines()[0]
-polymer = list(zip(template, template[1:]))
+polymer = list(zip_longest(template, template[1:]))
 rules = dict(
     match(data, r"(\w)(\w) -> (\w)", lambda a, b, c: ((a, b), ((a, c), (c, b))))
 )
@@ -26,14 +27,13 @@ pairs = Counter(polymer)
 for _ in range(40):
     pairs_ = Counter()
     for pair, n in pairs.items():
-        for p in rules[pair]:
+        for p in rules.get(pair, [pair]):
             pairs_[p] += n
     pairs = pairs_
 
 elements = Counter()
 for pair, n in pairs.items():
-    elements[pair[1]] += n
-elements[template[0]] += 1
+    elements[pair[0]] += n
 
 most_common = elements.most_common()
 print(most_common[0][1] - most_common[-1][1])
