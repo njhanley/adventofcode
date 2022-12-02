@@ -1,0 +1,23 @@
+#!/bin/sh
+
+user_agent='github.com/njhanley/adventofcode by nicholasjhanley@gmail.com'
+
+die() { printf '%s\n' "$*" >&2; exit 1; }
+
+[ "$AOC_SESSION" ] || die "AOC_SESSION is not set"
+
+cwd="$(pwd)"
+dir="${cwd##*/}"
+day="$(printf '%d' "${dir%%[^0-9]*}")"
+[ "$day" != '0' ] || die "failed to parse day from \"$dir\""
+
+cwd="${cwd%/*}"
+dir="${cwd##*/}"
+year="$(printf '%d' "${dir%%[^0-9]*}")"
+[ "$year" != '0' ] || die "failed to parse year from \"$dir\""
+
+curl --no-progress-meter \
+     --cookie "session=$AOC_SESSION" \
+     --user-agent "$user_agent"
+     "https://adventofcode.com/$year/day/$day/input" \
+| tee input.txt
