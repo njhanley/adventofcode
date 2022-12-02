@@ -18,12 +18,12 @@ std::fs::read_to_string("input.txt")
 			"A Z" | "B X" | "C Y" => 0,
 			"A X" | "B Y" | "C Z" => 3,
 			"A Y" | "B Z" | "C X" => 6,
-			_ => 0,
+			_ => unreachable!(),
 		}) + (match round.chars().last().unwrap() {
 			'X' => 1,
 			'Y' => 2,
 			'Z' => 3,
-			_ => 0,
+			_ => unreachable!(),
 		})
 	})
 	.sum::<u32>()

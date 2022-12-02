@@ -23,19 +23,19 @@ std::fs::read_to_string("input.txt")
 		"C X" => "C B",
 		"C Y" => "C C",
 		"C Z" => "C A",
-		_ => "",
+		_ => unreachable!(),
 	})
 	.map(|round| {
 		(match round {
 			"A C" | "B A" | "C B" => 0,
 			"A A" | "B B" | "C C" => 3,
 			"A B" | "B C" | "C A" => 6,
-			_ => 0,
+			_ => unreachable!(),
 		}) + (match round.chars().last().unwrap() {
 			'A' => 1,
 			'B' => 2,
 			'C' => 3,
-			_ => 0,
+			_ => unreachable!(),
 		})
 	})
 	.sum::<u32>()
