@@ -1,8 +1,5 @@
 #!/usr/bin/env rust-script
 
-use std::collections::{hash_map::RandomState, HashSet};
-use std::iter::FromIterator;
-
 impl<T> Pipe for T {}
 trait Pipe: Sized {
 	fn pipe<B, F>(self, f: F) -> B
@@ -19,20 +16,16 @@ std::fs::read_to_string("input.txt")
 	.collect::<Vec<_>>()
 	.chunks(3)
 	.map(|group| {
-		*group
+		let mut set = [0u8; 128];
+		group
 			.iter()
-			.map(|rucksack| HashSet::from_iter(rucksack.chars()))
-			.reduce(|a: HashSet<char, RandomState>, b| &a & &b)
-			.iter()
-			.next()
-			.unwrap()
-			.iter()
-			.next()
-			.unwrap()
+			.enumerate()
+			.for_each(|(i, &line)| line.chars().for_each(|c| set[c as usize] |= 1 << i));
+		set.iter().position(|&n| n == 0b111).unwrap() as u8
 	})
 	.map(|c| match c {
-		'a'..='z' => 1 + c as u8 - b'a',
-		'A'..='Z' => 27 + c as u8 - b'A',
+		b'a'..=b'z' => 1 + c - b'a',
+		b'A'..=b'Z' => 27 + c - b'A',
 		_ => unreachable!(),
 	} as u32)
 	.sum::<u32>()

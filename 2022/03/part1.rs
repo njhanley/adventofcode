@@ -16,11 +16,11 @@ std::fs::read_to_string("input.txt")
 	.map(|line| line.split_at(line.len() / 2))
 	.map(|(a, b)| {
 		let i = a.find(|c| b.contains(c)).unwrap();
-		a.chars().nth(i).unwrap()
+		a.chars().nth(i).unwrap() as u8
 	})
 	.map(|c| match c {
-		'a'..='z' => 1 + c as u8 - b'a',
-		'A'..='Z' => 27 + c as u8 - b'A',
+		b'a'..=b'z' => 1 + c - b'a',
+		b'A'..=b'Z' => 27 + c - b'A',
 		_ => unreachable!(),
 	} as u32)
 	.sum::<u32>()
