@@ -19,13 +19,12 @@ std::fs::read_to_string("input.txt")
 	.position(|window| {
 		let mut set = [0u8; 128];
 		for &c in window {
+			set[c as usize] += 1;
 			if set[c as usize] > 0 {
 				return false;
-			} else {
-				set[c as usize] += 1;
 			}
 		}
-		return true;
+		true
 	})
 	.unwrap()
 	.pipe(|index| index + LENGTH)
