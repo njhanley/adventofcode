@@ -17,10 +17,10 @@ std::fs::read_to_string("input.txt")
 	.collect::<Vec<_>>()
 	.windows(LENGTH)
 	.position(|window| {
-		[0u8; 128].pipe(|mut set| {
-			window.iter().for_each(|&c| set[c as usize] += 1);
-			!set.iter().any(|&n| n > 1)
-		})
+		window
+			.iter()
+			.fold(0u128, |set, &c| set | 1 << c as u8)
+			.count_ones() == LENGTH as u32
 	})
 	.unwrap()
 	.pipe(|index| index + LENGTH)
