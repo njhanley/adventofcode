@@ -8,13 +8,12 @@ die() { printf '%s\n' "$*" >&2; exit 1; }
 
 cwd="$(pwd)"
 dir="${cwd##*/}"
-day="$(printf '%d' "${dir%%[^0-9]*}")"
-[ "$day" != '0' ] || die "failed to parse day from \"$dir\""
+day="${dir%%[^0-9]*}"
+day="${day#0}"
 
 cwd="${cwd%/*}"
 dir="${cwd##*/}"
-year="$(printf '%d' "${dir%%[^0-9]*}")"
-[ "$year" != '0' ] || die "failed to parse year from \"$dir\""
+year="${dir%%[^0-9]*}"
 
 curl --no-progress-meter \
      --cookie "session=$AOC_SESSION" \
