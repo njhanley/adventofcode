@@ -15,10 +15,8 @@ cwd="${cwd%/*}"
 dir="${cwd##*/}"
 year="${dir%%[^0-9]*}"
 
-rows="$(stty size | cut -d ' ' -f 1)"
-
 curl --no-progress-meter \
      --cookie "session=$AOC_SESSION" \
      --user-agent "$user_agent" \
      "https://adventofcode.com/$year/day/$day/input" \
-| tee input.txt | head -n "$(( $rows - 1 ))"
+| tee input.txt
