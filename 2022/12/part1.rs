@@ -10,7 +10,7 @@ trait Pipe: Sized {
 	}
 }
 
-// A* implementation curtesy of ChatGPT
+// A* implementation courtesy of ChatGPT
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet};
 
