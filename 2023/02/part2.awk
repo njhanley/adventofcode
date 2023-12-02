@@ -1,25 +1,31 @@
 #!/usr/bin/awk -f
 
-BEGIN { FS = "; " }
+BEGIN {
+	split("red green blue", colors)
+	FS = "; "
+}
 
 function max(a, b) { return a > b ? a : b }
+function product(a, __x) { __x = 1; for (i in a) __x *= a[i]; return __x }
 
 {
 	match($0, /^Game [0-9]+: /)
 	$0 = substr($0, RSTART + RLENGTH)
 
 	for (i = 1; i <= NF; i++) {
-		split($i, subset, /, /)
+		split($i, subset, ", ")
 		for (j in subset) {
 			split(subset[j], pair, " ")
 			cubes[pair[2]] = pair[1]
 		}
-		minimum["red"] = max(minimum["red"], cubes["red"])
-		minimum["green"] = max(minimum["green"], cubes["green"])
-		minimum["blue"] = max(minimum["blue"], cubes["blue"])
+		for (j in colors) {
+			c = colors[j]
+			minimum[c] = max(minimum[c], cubes[c])
+		}
 		delete cubes
 	}
-	sum += minimum["red"] * minimum["green"] * minimum["blue"]
+
+	sum += product(minimum)
 	delete minimum
 }
 
