@@ -28,6 +28,5 @@ END {
 			delete values[k]
 		}
 	}
+	print sum
 }
-
-END { print sum }

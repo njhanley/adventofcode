@@ -19,8 +19,9 @@ END {
 		split(coord, p, SUBSEP)
 		for (y = p[1] - 1; y <= p[1] + 1; y++) {
 			for (x = p[2] - 1; x <= p[2] + 1; x++) {
-				if ((y, x) in numbers && !(numbers[y, x] in counted)) {
-					symbols[coord] *= values[k = numbers[y, x]]
+				if ((y, x) in numbers &&
+				    !((k = numbers[y, x]) in counted)) {
+					symbols[coord] *= values[k]
 					connections[coord]++
 					counted[k]
 				}
@@ -31,6 +32,5 @@ END {
 	for (coord in connections)
 		if (connections[coord] == 2)
 			sum += symbols[coord]
+	print sum
 }
-
-END { print sum }
