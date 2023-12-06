@@ -9,8 +9,7 @@ function splitset(s, a, fs, __a) {
 }
 
 {
-	match($0, /^Card [0-9]+:[ ]*/)
-	$0 = substr($0, RSTART + RLENGTH)
+	sub(/^Card [0-9]+:[ ]*/, "")
 
 	splitset($1, winners, " ")
 	splitset($2, have, " ")

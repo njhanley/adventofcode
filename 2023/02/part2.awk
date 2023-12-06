@@ -9,8 +9,7 @@ function max(a, b) { return a > b ? a : b }
 function product(a, __x) { __x = 1; for (i in a) __x *= a[i]; return __x }
 
 {
-	match($0, /^Game [0-9]+: /)
-	$0 = substr($0, RSTART + RLENGTH)
+	sub(/^Game [0-9]+: /, "")
 
 	for (i = 1; i <= NF; i++) {
 		split($i, subset, ", ")

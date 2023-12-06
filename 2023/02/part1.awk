@@ -3,8 +3,7 @@
 BEGIN { FS = "; " }
 
 {
-	match($0, /^Game [0-9]+: /)
-	$0 = substr($0, RSTART + RLENGTH)
+	sub(/^Game [0-9]+: /, "")
 
 	valid = 1
 	for (i = 1; i <= NF; i++) {
