@@ -8,11 +8,11 @@ function push(a, x) {
 	a[length(a) + 1] = x
 }
 
-function pop(a) {
-	x = a[1]
-	for (i = 1; i < length(a); i++) a[i] = a[i + 1]
-	delete a[i]
-	return x
+function pop(a, __x, __i) {
+	__x = a[1]
+	for (__i = 1; __i < length(a); __i++) a[__i] = a[__i + 1]
+	delete a[__i]
+	return __x
 }
 
 BEGIN { RS = "" }

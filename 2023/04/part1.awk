@@ -2,10 +2,10 @@
 
 BEGIN { FS = "|" }
 
-function splitset(s, a, fs, __a) {
+function splitset(s, a, fs, __a, __i) {
 	delete a
 	split(s, __a, fs)
-	for (i in __a) a[__a[i]] = 1
+	for (__i in __a) a[__a[__i]] = 1
 }
 
 {

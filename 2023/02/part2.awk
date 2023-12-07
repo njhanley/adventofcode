@@ -6,7 +6,12 @@ BEGIN {
 }
 
 function max(a, b) { return a > b ? a : b }
-function product(a, __x) { __x = 1; for (i in a) __x *= a[i]; return __x }
+
+function product(a, __x, __i) {
+	__x = 1
+	for (__i in a) __x *= a[__i]
+	return __x
+}
 
 {
 	sub(/^Game [0-9]+: /, "")
