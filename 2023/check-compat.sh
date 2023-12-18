@@ -5,7 +5,7 @@ check() {
 	$1 -f "$2/part$3.awk" "$2/input.txt"
 }
 
-for day in *; do
+for day in ${@:-*}; do
 	[ -d "$day" ] || continue
 	for part in 1 2; do
 		echo "=== Day $day Part $part ==="
